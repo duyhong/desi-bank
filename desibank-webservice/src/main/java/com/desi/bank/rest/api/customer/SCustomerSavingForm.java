@@ -1,0 +1,90 @@
+package com.desi.bank.rest.api.customer;
+
+import java.util.Date;
+
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+public class SCustomerSavingForm {
+    private int csaid;
+	private String name;
+	private String email;
+	private String mobile;
+	private String location;
+	private Date doa;
+	private String status;
+	private String appref;
+	
+	public String getAppref() {
+		return appref;
+	}
+
+	public void setAppref(String appref) {
+		this.appref = appref;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public int getCsaid() {
+		return csaid;
+	}
+
+	public void setCsaid(int csaid) {
+		this.csaid = csaid;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+
+
+	@JsonSerialize(using=JsonDateSerializer.class)
+	public Date getDoa() {
+		return doa;
+	}
+
+	public void setDoa(Date doa) {
+		this.doa = doa;
+	}
+
+	@Override
+	public String toString() {
+		return "CustomerSavingForm [name=" + name + ", email=" + email + ", mobile=" + mobile + ", location=" + location
+				+ ", doa=" + doa + "]";
+	}
+
+}

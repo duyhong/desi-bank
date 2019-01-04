@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+			p{
+				width: 70%;
+				font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans';font-size: 18px;
+				font-style: normal;
+				font-variant: normal;
+				font-weight: 500;
+				line-height: 26.4px;
+			}
+	</style>
+</head>
+<body>
+	  <p>	   	
+      Dear $name $year,
+      </p>
+       <p  style="color: green;">	   	
+   	 Your application is up and running.
+   	 </p>
+   	   <p style="color: #242625;">	   	
+   	 So you can access it now. <br/>
+
+   	 <br/>    	
+   	   <p>	   	
+   	 	Please feel free to write a email in case of any query.
+   	 </p>
+   	  <p>	 
+   	 Thanks & Regards,
+   	 <br/>DesiBank Admin
+   	 <br/>
+   	 <span style="color:black;">Email : <b>$email</b></span>
+   	 <br/>
+   	 <span style="color:black;">Mobile : $mobile</span>
+   	 <br/>
+   	  <img src="cid:regards"/>
+   	 </p>
+</body>
+</html>
