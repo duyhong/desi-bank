@@ -15,6 +15,7 @@ public class CityEntity {
 
 	@Id
 	@GeneratedValue
+	@Column(name="sno")
 	public int getCid() {
 		return cid;
 	}
@@ -32,7 +33,7 @@ public class CityEntity {
 		this.ccode = ccode;
 	}
 
-	@Column(length=100)
+	@Column(name="cityname",length=100)
 	public String getName() {
 		return name;
 	}

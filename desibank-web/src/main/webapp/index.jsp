@@ -111,9 +111,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<input type="tel" placeholder="Phone number" required="" name="mobile"/>
 							<!-- 	<input type="text" placeholder="Location" required="" name="location"/> -->
 
-							<select name="location">
-								<option>Fremont</option>
-								<option>Jersey</option>
+							<select id="location" name="location" style="height:30px;width: 250px;">
 							</select>
 							<div class="submit">
 								<input type="button" value="get started"  
@@ -527,15 +525,30 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script type="text/javascript" src="js/move-top.js"></script>
 	<script type="text/javascript" src="js/easing.js"></script>
 	
+	<script type="text/javascript">
+	 var contextPath="${pageContext.request.contextPath}";
+	</script>
+	
 	<!-- here stars scrolling icon -->
 	<script type="text/javascript">
 	  function openLoginPage() {
 		  	$("#errorMessage").html("");
 			$("#loginModel").modal("show");
 	  }
+	  
+	  function loadCity(){
+	  		 $.getJSON(contextPath+"/v1/customer/cities", function(result){
+	  		     	var $dropdown = $("#location");
+	  		     	$.each(result, function() {
+	  		     	    $dropdown.append($("<option />").val(this.name).text(this.name));
+	  		     	});
+	  		});
+	  		
+	  	}
 	
 		$(document).ready(function() {
-			
+		
+			loadCity();
 			$("#savingAccount").click(function(){
 				  console.log("_@@)@)@)@)@(@(@&&&&&&&&&&&&&&&&&&&))");
 				  //http://localhost:8080/desibank-web/	

@@ -173,7 +173,14 @@ public class BankEmployeeController {
 	public String showPendingSavingAccountRequest(Model  model){
 		List<CustomerSavingForm> customerSavingFormList=employeeService.findPendingSavingAccountRequests();
 		model.addAttribute("customerSavingFormList", customerSavingFormList);
-		 return DesiBankNavigationConstant.EMPLOYEE_BASE+DesiBankNavigationConstant.PENDING_SAVING_REQUESTS_PAGE;
+		
+		//Code to fetch number of request
+	   int pendingRequestCount=employeeService.findPendingSavingAccountRequestsCount();
+	   //Using model we can transfer our data from controller to view
+	   //it 
+	   model.addAttribute("pendingRequestCount", pendingRequestCount);
+		   
+		return DesiBankNavigationConstant.EMPLOYEE_BASE+DesiBankNavigationConstant.PENDING_SAVING_REQUESTS_PAGE;
 	}
 	
 	@RequestMapping(value="pendingSavingAccountRequests",method=RequestMethod.GET)

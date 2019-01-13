@@ -1,5 +1,8 @@
 package com.desi.bank.springdata.service.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class CityVO {
 
 	private int cid;

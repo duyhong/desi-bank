@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.BeanUtils;
@@ -36,7 +37,7 @@ public class BankCustomerRestApi {
 	private CustomerService customerService;
 	
 	public BankCustomerRestApi(){
-		System.out.println("BankCustomerRestApiBankCustomerRestApiBankCustomerRestApi");
+		System.out.println("Pcockco pcock BankCustomerRestApiBankCustomerRestApiBankCustomerRestApi");
 		System.out.println("BankCustomerRestApiBankCustomerRestApiBankCustomerRestApi");
 		System.out.println("BankCustomerRestApiBankCustomerRestApiBankCustomerRestApi");
 		System.out.println("BankCustomerRestApiBankCustomerRestApiBankCustomerRestApi");
@@ -48,7 +49,15 @@ public class BankCustomerRestApi {
 	//v1/customer/cities
 	@Path("/cities")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<CityVO> loadCities(){
+		return cityService.findCities();
+	}
+
+	//v1/customer/cities
+	@Path("/pk-cities")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public CityWrapper loadCities(){
 		CityWrapper cityWrapper=new CityWrapper();
 		cityWrapper.setCityVOs(cityService.findCities());
@@ -80,7 +89,7 @@ public class BankCustomerRestApi {
 			return applicationMessageResponse;
 	}
 
-	@Path("/tcities")
+	@Path("/mock/tt-tcities")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<String> sloadCities(){
@@ -89,6 +98,19 @@ public class BankCustomerRestApi {
 		cities.add("Ooe");
 	    return cities;
 	}
+	
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/find-cities")
+	public GenericEntity<List<String>> stringlist(){
+	List<String> cities=new ArrayList<>();
+	List<CityVO> cityVOs=cityService.findCities();
+	for(CityVO cityVO:cityVOs){
+		cities.add(cityVO.getName());
+	}
+	  return new GenericEntity<List<String>>(cities) {};
+	}
+
 	
 	//URL for this resource
 	//contentpath/v1/customer/app/status?appRefNo=AS0292022

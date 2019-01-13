@@ -80,7 +80,7 @@ function openApprovalPopup(name,email,csaid){
 					//data is JavaScript object against JSON response coming fromm the server
 						console.log(jsonData);
 						if(jsonData=='success') {
-							var  pcsaid =$("#pcsaid").val();
+							var  pcsaid =$("#apcsaid").val();
 							$("#"+pcsaid).hide();
 							$("#approveReuqestModel").modal("hide");
 						}
