@@ -127,7 +127,10 @@ public class BankEmployeeController {
 	
 	
 	@RequestMapping(value="rejectSavingRequest",method=RequestMethod.POST)
-@ResponseBody	public String rejectSavingSavingAccountRequest(@ModelAttribute RejectSavingRequestForm rejectSavingRequestForm,HttpServletRequest request,Model  model){
+	@ResponseBody	public String rejectSavingSavingAccountRequest(@ModelAttribute RejectSavingRequestForm rejectSavingRequestForm,HttpServletRequest request,Model  model){
+		
+		System.out.println(rejectSavingRequestForm);
+	
 		if(logger.isDebugEnabled()) {
 			logger.debug("Coming data from the client "+rejectSavingRequestForm);
 			String userAgent=request.getHeader("User-Agent");
@@ -141,19 +144,36 @@ public class BankEmployeeController {
 		if(logger.isInfoEnabled()) {
 			logger.info("Please wait.....email is sending........................................");
 		}
+		
+		try {
+			EmailVO mail=new EmailVO();
+			mail.setBaseUrl(DesiBankUtils.getServerBaseURL(request));
+			mail.setFrom("desibankproject@gmail.com");
+			//mail.setLink(registrationLink);
+			mail.setName(rejectSavingRequestForm.getCustomerName());
+			mail.setSubject("Regarding Registration link to open a saving account");
+			mail.setTo(rejectSavingRequestForm.getEmail());
+			customerEmailService.sendRejectionEmail(mail);
+		}catch(Exception ex) {
+			StringWriter stringWriter=new StringWriter();
+			ex.printStackTrace(new PrintWriter(stringWriter));
+			if(logger.isErrorEnabled()){
+				logger.error(stringWriter.toString());
+			}
+		}
 	/*	SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("nagen@synergisticit.com");
         message.setTo(rejectSavingRequestForm.getEmail());
         message.setSubject("Regarding rejection of your openining saving account request!");
         message.setText("Reason of rejection :  = "+rejectSavingRequestForm.getReason());
-        mailSender.send(message);*/
+        mailSender.send(message);
 		TestVO testVO=new TestVO();
 		testVO.setFrom("desibankproject@gmail.com");
 		testVO.setName("DesiBank");
 		testVO.setSubject("Regarding Message Rejection");
 		testVO.setMessage("Testing testing testing");
 		testVO.setTo(rejectSavingRequestForm.getEmail());
-		emailMessageSenderService.sendSampleData(testVO);
+		emailMessageSenderService.sendSampleData(testVO);*/
 		/*System.out.println("___message has beeb send to the message broker!~~~~~~~~~~~~~~~~~~~~~~");
 		EmailVO mail=new EmailVO();
 		mail.setBaseUrl(DesiBankUtils.getServerBaseURL(request));

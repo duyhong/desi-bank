@@ -12,5 +12,6 @@ public interface ICustomerEmailService {
 	public void sendRegistrationEmail(EmailVO mail);
 	public String sendEnquiryConfirmation(String email, String name, String imageUrl,String appref);
 	public String sendAccountCreationEmail(CustomerAccountRegistrationVO customerAccountRegistrationVO);
+	void sendRejectionEmail(EmailVO mail);
 
 }

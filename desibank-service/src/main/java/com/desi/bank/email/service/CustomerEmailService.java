@@ -181,5 +181,51 @@ public class CustomerEmailService  implements ICustomerEmailService{
 			exe.printStackTrace();
 		}
 	}
+	 
+	 @Async
+		@Override
+		public void sendRejectionEmail(EmailVO mail) {
+			MimeMessage message = mailSender.createMimeMessage();
+			try {
+				InternetAddress fromAddress = new InternetAddress(	mail.getFrom(), "DesiBank Admin");
+				message.setFrom(fromAddress);
+				// message.setSender(new InternetAddress(from));
+				message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(mail.getTo()));
+				message.setSubject(mail.getSubject());
+				message.setSentDate(new Date());
+				
+				
+				// This mail has 2 part, the BODY and the embedded image
+				MimeMultipart multipart = new MimeMultipart("related");
+				// first part (the html)
+				BodyPart messageBodyPart = new MimeBodyPart();
+				
+				 //Classpath - >>> /WEB-INF/classes
+				//this code is creating html template with dynamic data
+				Template template = velocityEngine.getTemplate("./templates/reject-customer-registration.vm");
+				VelocityContext velocityContext = new VelocityContext();
+				velocityContext.put("cname", mail.getName());
+				//velocityContext.put("registrationlink", mail.getLink());
+				StringWriter stringWriter = new StringWriter();
+				template.merge(velocityContext, stringWriter);
+				System.out.println(" :-"+stringWriter.toString());
+
+				messageBodyPart.setContent(stringWriter.toString(), "text/html");
+				multipart.addBodyPart(messageBodyPart);
+				
+				 messageBodyPart = new MimeBodyPart();
+				// DataSource fds = new FileDataSource("D:/sss.jpg");
+				 System.out.println("_)#_)#  = URL = "+mail.getBaseUrl()+"/images/banklogo.png");
+		         messageBodyPart.setDataHandler(new DataHandler(new URL(mail.getBaseUrl()+"/images/banklogo.png")));
+		         messageBodyPart.setHeader("Content-ID", "<banklogo>");
+		         multipart.addBodyPart(messageBodyPart);
+			
+		         // put everything together
+				message.setContent(multipart);
+				mailSender.send(message);
+			} catch (Exception exe) {
+				exe.printStackTrace();
+			}
+		}
 }
 
