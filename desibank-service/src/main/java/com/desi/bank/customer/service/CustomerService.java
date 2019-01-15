@@ -87,5 +87,7 @@ public interface CustomerService {
 
 	public CustomerSavingForm findCustomerSavingEnquiryByAppRef(String appRef);
 
+	public List<PayeeModel> getPayeeList(String loginid);
+
 
 }

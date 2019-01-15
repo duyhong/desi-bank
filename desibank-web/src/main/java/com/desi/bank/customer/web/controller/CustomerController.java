@@ -2,7 +2,9 @@ package com.desi.bank.customer.web.controller;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -411,17 +413,22 @@ public class CustomerController {
 		 return DesiBankNavigationConstant.CUSTOMER_BASE+DesiBankNavigationConstant.CUSTOMER_FUND_TRANSFER_PAGE;
 	}
 	
-	/*@ModelAttribute("fromAccountList")
+	@ModelAttribute("fromAccountList")
 	public Map<String,String> fromAccountList(HttpSession session){
 		Map<String,String> options=new LinkedHashMap<String,String>();
 		UserSessionVO userSessionVO= (UserSessionVO) session.getAttribute("userSessionVO");
-		String loginid=userSessionVO.getLoginid();
-		List<CustomerAccountInfoVO> fromAccountDetailList = customerService.getAccountDetails(loginid);
-		 options.put("NONE", "--- Select Account ---");
-		 for(CustomerAccountInfoVO item : fromAccountDetailList){
-			 String dname=item.getAccountNumber()+"-"+item.getAccountType();
-			 options.put(item.getAccountNumber(), dname);
-		 }	 
+		
+		if(userSessionVO != null) {
+			String loginid=userSessionVO.getLoginid();
+			List<CustomerAccountInfoVO> fromAccountDetailList = customerService.getAccountDetails(loginid);
+			 options.put("NONE", "--- Select Account ---");
+			 if(fromAccountDetailList!=null) {
+				 for(CustomerAccountInfoVO item : fromAccountDetailList){
+					 String dname=item.getAccountNumber()+"-"+item.getAccountType();
+					 options.put(item.getAccountNumber(), dname);
+				 }	 
+			 }
+		}
 		return options;
 	}
 	
@@ -430,15 +437,20 @@ public class CustomerController {
 	public Map<String,String> payeeListForCustomer(HttpSession session){
 		Map<String,String> options=new LinkedHashMap<String,String>();
 		UserSessionVO userSessionVO= (UserSessionVO) session.getAttribute("userSessionVO");
-		String loginid=userSessionVO.getLoginid();
-		List<PayeeModel> payeeList = customerService.getPayeeList(loginid);
-		 options.put("NONE", "--- Select Payee ---");
-		 for(PayeeModel item : payeeList){
-			 String dname=item.getPayeeAccountNo()+"-"+item.getPayeeName();
-			 options.put(item.getPayeeAccountNo(), dname);
-		 }	 
+		
+		if(userSessionVO != null) {
+				String loginid=userSessionVO.getLoginid();
+				List<PayeeModel> payeeList = customerPayeeService.getPayeeList(loginid);
+				 options.put("NONE", "--- Select Payee ---");
+				 if(payeeList!=null) {
+				 for(PayeeModel item : payeeList){
+					 String dname=item.getPayeeAccountNo()+"-"+item.getPayeeName();
+					 options.put(item.getPayeeAccountNo(), dname);
+				 }	 
+			 }
+		}
 		return options;
-	}*/
+	}
 	
 	
 	 @RequestMapping(value = "customer/reviewFundTransfer.htm", method = RequestMethod.POST)

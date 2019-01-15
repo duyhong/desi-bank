@@ -254,6 +254,12 @@ public class CustomerServiceImpl implements CustomerService {
 			CustomerTransactionHistory transactionhistory) {
 		customerDao.updateScheduledTransaction(transactionhistory);
 	}
+
+	@Override
+	public List<PayeeModel> getPayeeList(String loginid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

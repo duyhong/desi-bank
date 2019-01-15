@@ -47,12 +47,12 @@ public class BankCustomerRestApi {
 	private ICityService cityService;
 
 	//v1/customer/cities
-	@Path("/cities")
+	/*@Path("/cities")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<CityVO> loadCities(){
 		return cityService.findCities();
-	}
+	}*/
 
 	//v1/customer/cities
 	@Path("/pk-cities")
