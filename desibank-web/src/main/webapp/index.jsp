@@ -533,8 +533,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script type="text/javascript">
 	  function openLoginPage() {
 		  	$("#errorMessage").html("");
+		  	$("#unblockButton").hide();
 			$("#loginModel").modal("show");
 	  }
+	  
+	  /* function openUnblockPage() {
+		  	$("#errorMessage").html("");
+		  	//$("#unblockButton").hide();
+			$("#unblockModel").modal("show");
+	  } */
 	  
 	  function loadCity(){
 	  		 $.getJSON(contextPath+"/v1/customer/cities", function(result){
@@ -547,7 +554,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	  	}
 	
 		$(document).ready(function() {
-		
+			var userid;
+        	var answerId1;  
+        	var answerId2;
+        	
 			loadCity();
 			$("#savingAccount").click(function(){
 				  console.log("_@@)@)@)@)@(@(@&&&&&&&&&&&&&&&&&&&))");
@@ -592,7 +602,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			});
 			
 			$("#loginButton").click(function(){
-					var userid=$("input[type='text'][id='userid']").val();
+					userid=$("input[type='text'][id='userid']").val();
 					if(userid.length==0) {
 						$("#errorMessage").html("Userid cannot be blank.....");
 						$("input[type='text'][id='userid']").focus();
@@ -619,17 +629,74 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                        		 	}
                        		 	else if(response.status=="1") {
                         			$("#errorMessage").html(response.message+" and you have only "+response.noOfAttempt+" attempts left.");
-                        		}     		else{
+                        		}
+                       		 	else if(response.status=="2") {
+                       		 		$("#errorMessage").html(response.message);
+	                   		 		$("#unblockButton").show();
+                       		 	}
+                       		 	else{
                         			$("#errorMessage").html(response.message);
                         		}
                             return;
-                        },  error : function(response) {
+                        },  
+                        error : function(response) {
                         		//you can show error popup...
                         }
                     }); 
 			});
-								
-	});
+			
+			$("#unblockButton").click(function(){
+				$("#otp").hide();
+				//alert("userid = "+userid);
+				$.ajax({type: "GET",
+					 url : contextPath+"/v1/customer/questions/"+userid,
+                     dataType: 'json',
+                   /*   contentType: 'application/json; charset=utf-8', */
+                     success : function(response) {
+                    	//console.log(response);
+                    	
+                    	answerId1 = response[0]["id"];
+                    	answerId2 = response[1]["id"];
+                    	//console.log("answerId1: " + answerId1)
+                    	//console.log("answerId2: " + answerId2);
+                    	
+                    	$("#question1").html(response[0]["question"]);
+                    	$("#question2").html(response[1]["question"]);
+                  
+						$("#loginModel").modal("hide");
+						$("#unblockModel").modal("show");
+                     }
+				});				
+			});
+			
+			$("#unblockBtn").click(function(){
+				var a1 = $("#answer1").val();
+				var a2 = $("#answer2").val();
+				console.log("a1: " + a1);
+				console.log("a2: " + a2);
+				
+				/* var answer1 = {};
+				answer1[answerId1] = a1;
+				var answer2 = {};
+				answer2[answerId2] = a2; */
+				var answers = {[answerId1]:a1,[answerId2]:a2}; 
+				
+				$.ajax({type: "POST",
+						 url : contextPath+"/v1/customer/answers",
+						 //data : JSON.stringify({"userId": userid, "answers": {{[answerId1]: a1}, {[answerId2]: a2}}}),
+	                     data : JSON.stringify({"userId": userid, answers}),
+						 dataType: 'json',
+	                     contentType: 'application/json; charset=utf-8',
+	                     success : function(response) {
+	                   	 	console.log(response);
+                   	
+	                   	 	if(response.status === "success") {
+	                   	 		$("#otp").show();
+	                   	 	}
+                    	}
+				});				
+			});
+		});
 	</script>
 	<!-- //here ends scrolling icon -->
 	<script src="js/bars.js"></script>
@@ -646,7 +713,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	
 	</script>
 	
-	  <!-- Modal -->
+  <!-- Modal -->
   <div class="modal fade" id="loginModel" role="dialog">
     <div class="modal-dialog">
       <!-- Modal content-->
@@ -682,25 +749,116 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<td>Password</td>
 									<td><input type="password"  id="password"   name="j_password" class="form-control" style="background-color: #d9edf7;margin-left: 20px;width: 350px;color:black;" ></td>
 								</tr>
-									<tr>
+								<tr>
 									<td colspan="2" id="passwordError">&nbsp;</td>
 								</tr>
-									<tr>
+								<tr>
 									<td>&nbsp;</td>
 									<td>&nbsp;
-									<input type="button" name="login" style=" color: #FFFFFF;
-    background: #ffb900;
-    border: 2px solid #ffb900;
-    text-transform: uppercase;
-    padding: .2em 1em;
-    font-size: 1.3em;
-    font-family: 'Ropa Sans', sans-serif;" value="Login"  id="loginButton"></td>
+										<input type="button" name="login" style=" color: #FFFFFF;
+										    background: #ffb900;
+										    border: 2px solid #ffb900;
+										    text-transform: uppercase;
+										    padding: .2em 1em;
+										    font-size: 1.3em;
+										    font-family: 'Ropa Sans', sans-serif;" value="Login"  id="loginButton">
+									</td>
+    								<td>
+										<input type="button" name="login" style=" color: #FFFFFF;
+										    background: #ffb900;
+										    border: 2px solid #ffb900;
+										    text-transform: uppercase;
+										    padding: .2em 1em;
+										    font-size: 1.3em;
+										    font-family: 'Ropa Sans', sans-serif;" value="Unblock"  id="unblockButton">
+									</td>
 								</tr>
-									<tr>
+								<tr>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 								</tr>
-									<tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+							</table>							
+						</form>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+    </div>
+  </div>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="unblockModel" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          
+        </div>
+     	<div>
+			<div class="container">
+				<div>
+					<div class="col-md-5">
+						<form id="unblockForm" action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
+							 <img src="images/login.png" style="display: inline;"/><h5 class="modal-title" style="display: inline;font-size: 16px;">Unblock Account</h5>
+							 <br/>
+							 <br/>
+							<span id="errorMessage" style="color: red;font-size: 15px;"></span>
+							<p><h4>Security Questions:</h4></p> <br/>
+							<table>	
+								<tr>
+									<td id='question1'  style="width: 350px;"></td>
+									<td><input type="password"  id="answer1" name="answer1" class="form-control"  style="background-color: #d9edf7;width: 200px;color:black;"></td>
+								</tr>
+								
+								<tr>
+									<td colspan="2" id="userError2">&nbsp;</td>
+								</tr>
+								<tr>
+									<td id='question2'  style="width: 350px;"></td>
+									<td><input type="password"  id="answer2"   name="answer2" class="form-control" style="background-color: #d9edf7;width: 200px;color:black;" ></td>
+								</tr>
+								<tr>
+									<td colspan="2" id="userError3">&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td>&nbsp;
+										<input type="button" name="unblockBtn" style=" color: #FFFFFF;
+										    background: #ffb900;
+										    border: 2px solid #ffb900;
+										    text-transform: uppercase;
+										    padding: .2em 1em;
+										    font-size: 1.3em;
+										    font-family: 'Ropa Sans', sans-serif;" value="Unblock"  id="unblockBtn">
+									</td>
+								 </tr>
+							
+								 <tr id='otp'>
+								 	<td>End OTP <input type='text' name='unblock'></td>
+    								<td>
+										<input type="button" name="continue" style=" color: #FFFFFF;
+										    margin: 5px;
+										    background: #ffb900;
+										    border: 2px solid #ffb900;
+										    text-transform: uppercase;
+										    padding: .2em 1em;
+										    font-size: 1.3em;
+										    font-family: 'Ropa Sans', sans-serif;" value="Continue"  id="continueButton">
+									</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 								</tr>

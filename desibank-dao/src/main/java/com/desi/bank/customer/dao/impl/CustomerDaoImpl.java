@@ -413,7 +413,7 @@ public class CustomerDaoImpl extends HibernateDaoSupport implements CustomerDao 
 	@Override
 	public List<CustomerQuestionAnswer> getSecurityQns(String id) {
 		List<CustomerQuestionAnswer> questionList = (List<CustomerQuestionAnswer>)getHibernateTemplate().find(
-				"from CustomerQuestionAnswer cus where cus.userid=?",new Object[] { id }) ;
+				"from CustomerQuestionAnswer cus where userid=?",new Object[] { id }) ;
 		return questionList;
 		
 	}
@@ -448,7 +448,7 @@ public class CustomerDaoImpl extends HibernateDaoSupport implements CustomerDao 
 	@Override
 	public String findEmailByUserid(String userid) {
 		List<Customer> customerList = (List<Customer>)getHibernateTemplate().find(
-				"from Customer cus where cus.userid=?",new Object[] { userid }) ;
+				"from Customer cus where userid=?",new Object[] { userid }) ;
 		if(customerList!=null  && customerList.size()==0){
 			DesiBankException exception=new DesiBankException("email id does not exist  since userid "+userid+" is not there...");
 			throw exception;

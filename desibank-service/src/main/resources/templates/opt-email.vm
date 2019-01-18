@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+			p{
+				font-family: 'Open Sans', sans-serif;
+			}
+	</style>
+</head>
+  
+<body>
+	  <p>	   	
+      Dear ${cname},
+      </p>
+      	 <br/>	    
+       <p  style="color: blue;">	   	
+   	 You have to enter the below code into the OPT box to unblock your account.
+   	 </p>
+   	   <p>	   	
+   	 Your OPT code is : $optCode
+   	 </p>
+   	 <br/>	    	
+   	   
+   	  <p>	 
+   	 Thanks & Regards,
+   	 </p>
+   	 <p style="font-family: 'Open Sans', sans-serif;font-weight: bold;color:red;'">
+   	 DesiBank Admin<br/><br/>
+   	 <span style="color:black;">Mobile : +10292982929229</span>
+   	 </p>
+   	 	 <img src="cid:bankimage"/>
+    
+</body>
+</html>

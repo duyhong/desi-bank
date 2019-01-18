@@ -1,5 +1,6 @@
 package com.desi.bank.email.service;
 
+import java.io.Console;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.Date;
@@ -23,6 +24,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.desi.bank.customer.service.CustomerService;
 import com.desi.bank.employee.web.controller.form.CustomerAccountRegistrationVO;
 
 @Service("CustomerEmailService")
@@ -37,6 +39,9 @@ public class CustomerEmailService  implements ICustomerEmailService{
 	@Qualifier("velocityEngine")
 	 private VelocityEngine velocityEngine;
 	
+	@Autowired
+	@Qualifier("CustomerServiceImpl")
+	private CustomerService customerService;
 	
 	@Value("${app.contextpath}")
 	private String appContextpath;
@@ -182,7 +187,7 @@ public class CustomerEmailService  implements ICustomerEmailService{
 		}
 	}
 	 
-	 @Async
+	 	@Async
 		@Override
 		public void sendRejectionEmail(EmailVO mail) {
 			MimeMessage message = mailSender.createMimeMessage();
@@ -218,6 +223,61 @@ public class CustomerEmailService  implements ICustomerEmailService{
 				 System.out.println("_)#_)#  = URL = "+mail.getBaseUrl()+"/images/banklogo.png");
 		         messageBodyPart.setDataHandler(new DataHandler(new URL(mail.getBaseUrl()+"/images/banklogo.png")));
 		         messageBodyPart.setHeader("Content-ID", "<banklogo>");
+		         multipart.addBodyPart(messageBodyPart);
+			
+		         // put everything together
+				message.setContent(multipart);
+				mailSender.send(message);
+			} catch (Exception exe) {
+				exe.printStackTrace();
+			}
+		}
+	 	
+	 	@Async
+		@Override
+		public void sendOptCode(String userId) {
+			MimeMessage message = mailSender.createMimeMessage();
+			
+			String email = customerService.findEmailByUserid(userId);
+			System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@ email: " + email);
+			
+			try {
+				InternetAddress fromAddress = new InternetAddress("synergisticit2020@gmail.com", "DesiBank Admin");
+				message.setFrom(fromAddress);
+				// message.setSender(new InternetAddress(from));
+				message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(email));
+				message.setSubject("OPT Code to unblock your account");
+				message.setSentDate(new Date());
+				
+				
+				// This mail has 2 part, the BODY and the embedded image
+				MimeMultipart multipart = new MimeMultipart("related");
+				// first part (the html)
+				BodyPart messageBodyPart = new MimeBodyPart();
+				
+				 //Classpath - >>> /WEB-INF/classes
+				//this code is creating html template with dynamic data
+				Template template = velocityEngine.getTemplate("./templates/opt-email.vm");
+				VelocityContext velocityContext = new VelocityContext();
+				velocityContext.put("cname", userId);
+				
+				int optCode = (int)(Math.random() * 9999 + 1000);
+				
+				velocityContext.put("optCode", optCode);
+				StringWriter stringWriter = new StringWriter();
+				template.merge(velocityContext, stringWriter);
+				System.out.println(" :-"+stringWriter.toString());
+
+				messageBodyPart.setContent(stringWriter.toString(), "text/html");
+				multipart.addBodyPart(messageBodyPart);
+				
+				 messageBodyPart = new MimeBodyPart();
+				// DataSource fds = new FileDataSource("D:/sss.jpg");
+				// System.out.println("_)#_)#  = URL = "+mail.getBaseUrl()+"/images/banklogo.png");
+		        // messageBodyPart.setDataHandler(new DataHandler(new URL(mail.getBaseUrl()+"/images/banklogo.png")));
+				 String imageURL=appContextpath+"/images/thanks.png";
+		         messageBodyPart.setDataHandler(new DataHandler(new URL(imageURL)));
+				 messageBodyPart.setHeader("Content-ID", "<banklogo>");
 		         multipart.addBodyPart(messageBodyPart);
 			
 		         // put everything together

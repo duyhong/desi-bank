@@ -13,6 +13,7 @@ public interface DesiBankConstant {
 	public String PREFIX_ACCOUNT_NUMBER="003151";
 	
 	public String CURRENCY="Rs";
+	public String FAILURE = "fail";
 	
 	public static final String USERS_PROPERTIES_FILE="/WEB-INF/users.properties";
 	
