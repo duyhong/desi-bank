@@ -262,6 +262,7 @@ public class CustomerEmailService  implements ICustomerEmailService{
 				velocityContext.put("cname", userId);
 				
 				int optCode = (int)(Math.random() * 9999 + 1000);
+				customerService.saveOptCode(optCode, userId);
 				
 				velocityContext.put("optCode", optCode);
 				StringWriter stringWriter = new StringWriter();

@@ -89,5 +89,10 @@ public interface CustomerService {
 
 	public List<PayeeModel> getPayeeList(String loginid);
 
+	String saveOptCode(int code, String userid);
+
+	int findOptCodeByUserid(String userid);
+
+	String unblockAccount(String userid);
 
 }

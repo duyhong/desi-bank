@@ -85,6 +85,25 @@ public class BankCustomerRestApi {
         return responses;
     }
 	
+	@Path("/optcode/{optCode}/{userid}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public ApplicationMessageResponse unblockOptcodeVerification(@PathParam("optCode") int optCode, @PathParam("userid") String userid) {
+        // TODO: it uses Java Class from dao project..... should we change?
+		System.out.println("optCode = " + optCode);
+		ApplicationMessageResponse applicationMessageResponse = new ApplicationMessageResponse();
+        applicationMessageResponse.setStatus(DesiBankConstant.SUCCESS);
+		int code = customerService.findOptCodeByUserid(userid);
+		if(code == optCode) {
+			String result = customerService.unblockAccount(userid);
+			if(!result.equals(result)) {
+				applicationMessageResponse.setStatus(DesiBankConstant.FAILURE);
+				return applicationMessageResponse;
+			}
+		}
+		return applicationMessageResponse;
+    }
+	
 	@Path("/answers")
 	@POST
     @Produces(MediaType.APPLICATION_JSON)

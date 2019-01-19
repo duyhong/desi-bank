@@ -25,6 +25,7 @@ import com.desi.bank.common.dao.entity.CustomerQuestionAnswer;
 import com.desi.bank.common.dao.entity.CustomerSavingEntity;
 import com.desi.bank.common.dao.entity.CustomerTransactionHistory;
 import com.desi.bank.common.dao.entity.Login;
+import com.desi.bank.common.dao.entity.OptCode;
 import com.desi.bank.common.dao.entity.SecurityQuestions;
 import com.desi.bank.common.dao.entity.TransactionIdGenerator;
 import com.desi.bank.customer.dao.CustomerDao;
@@ -348,6 +349,20 @@ public class CustomerDaoImpl extends HibernateDaoSupport implements CustomerDao 
 	}
 
 	@Override
+	public String unblockAccount(String userid) {
+		List<Login> logins = (List<Login>) getHibernateTemplate().find("from Login l where l.loginid = ?", new Object[] { userid });
+		if(logins!=null && logins.size()==1){
+			Login login=logins.get(0);
+			//Automatically dirty checking mechanism
+			//updating the password
+			login.setLocked("no");
+			login.setNoOfAttempt(0);
+			return "success";
+		}
+		return "fail";
+	}
+	
+	@Override
 	public UserSessionVO validateCustomerByUserId(String userid) {
 		List<Login> logins = (List<Login>) getHibernateTemplate().find(
 				"from Login l where l.loginid = ?", new Object[] { userid });
@@ -551,5 +566,30 @@ public class CustomerDaoImpl extends HibernateDaoSupport implements CustomerDao 
 			getHibernateTemplate().update(payeeAcct);
 		}
 		return "success";
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED)
+	// REQUIRED means this method always execute in transaction
+	// This transaction only rollback for unchecked exception
+	public String saveOptCode(int code, String userid) {
+		System.out.println("OptCode  = " + code);
+		
+		OptCode oCode = new OptCode();
+		oCode.setOptcode(code);
+		oCode.setUserid(userid);
+		oCode.setTimestamp(new Timestamp(new Date().getTime()));
+		
+		getHibernateTemplate().save(oCode);
+		
+		return "success"; // returning the controll
+	}
+	
+	@Override
+	public int findOptCodeByUserid(String userid) {
+		List<OptCode> optCodes = (List<OptCode>)getHibernateTemplate().find("from OptCode cus where userid=? order by timestamp desc",new Object[] { userid }) ;
+		
+		return optCodes.get(0).getOptcode();
+			
+		//if(optCodes!=null  && optCodes.size()==0){
 	}
 }

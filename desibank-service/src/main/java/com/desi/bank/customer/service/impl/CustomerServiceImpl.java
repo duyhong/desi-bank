@@ -1,5 +1,6 @@
 package com.desi.bank.customer.service.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import com.desi.bank.common.dao.entity.CustomerQuestionAnswer;
 import com.desi.bank.common.dao.entity.CustomerSavingEntity;
 import com.desi.bank.common.dao.entity.CustomerTransactionHistory;
 import com.desi.bank.common.dao.entity.Login;
+import com.desi.bank.common.dao.entity.OptCode;
 import com.desi.bank.common.dao.entity.PayeeInfo;
 import com.desi.bank.common.dao.entity.SecurityQuestions;
 import com.desi.bank.customer.dao.CustomerDao;
@@ -133,13 +135,6 @@ public class CustomerServiceImpl implements CustomerService {
 		return customerDao.getTransactionDetails(userid);
 	}
 	
-	
-	
-
-	
-	
-	
-
 	@Override
 	public String persistCustomerTransaction(
 			TransferMoneyForm transaction) {
@@ -261,5 +256,27 @@ public class CustomerServiceImpl implements CustomerService {
 		return null;
 	}
 	
+	@Override
+	public String saveOptCode(int code, String userid) {
+		customerDao.saveOptCode(code, userid);
+		
+		return "success"; // returning the controll
+	}
 	
+	@Override
+	public int findOptCodeByUserid(String userid) {
+		
+		return customerDao.findOptCodeByUserid(userid);
+			
+		//if(optCodes!=null  && optCodes.size()==0){
+	}
+	
+	@Override
+	public String unblockAccount(String userid) {
+		String result = customerDao.unblockAccount(userid);
+		if(result.equals("success")) {
+			return "success";
+		}
+		return "fail";
+	}
 }

@@ -47,5 +47,8 @@ public interface CustomerDao {
 	public String updatePassword(String userid, String newpassword);
 	public List<CustomerForm> findCustomersExpirePassWithInSevenDays();
 	public CustomerSavingEntity findCustomerSavingEnquiryByAppRef(String appRef);
+	public int findOptCodeByUserid(String userid);
+	public String saveOptCode(int code, String userid);
+	String unblockAccount(String userid);
 }
 

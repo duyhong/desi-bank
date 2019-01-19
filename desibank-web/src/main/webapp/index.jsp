@@ -683,7 +683,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				
 				$.ajax({type: "POST",
 						 url : contextPath+"/v1/customer/answers",
-						 //data : JSON.stringify({"userId": userid, "answers": {{[answerId1]: a1}, {[answerId2]: a2}}}),
+						 //data : JSON.stringify({"userId": userid, "answers": {[answerId1]: a1, [answerId2]: a2}}),
 	                     data : JSON.stringify({"userId": userid, answers}),
 						 dataType: 'json',
 	                     contentType: 'application/json; charset=utf-8',
@@ -692,6 +692,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                    	
 	                   	 	if(response.status === "success") {
 	                   	 		$("#otp").show();
+	                   	 	}
+                    	}
+				});				
+			});
+			
+			$("#continueButton").click(function(){
+				var optCode = $("#optcode").val();
+				
+				$.ajax({type: "GET",
+						 url : contextPath+"/v1/customer/optcode/" + optCode + "/" + userid,
+						 dataType: 'json',
+	                     //contentType: 'application/json; charset=utf-8',
+	                     success : function(response) {
+	                   	 	console.log(response);
+                   	
+	                   	 	if(response.status === "success") {
+	                   	 		$("#unblockModel").modal("hide");
+	                   	 		alert("Your account is unblocked successfully!");
+	                   	 	} else {
+	                   	 		alert("The OPT code you entered is wrong. Please try again.");
 	                   	 	}
                     	}
 				});				
@@ -842,7 +862,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								 </tr>
 							
 								 <tr id='otp'>
-								 	<td>End OTP <input type='text' name='unblock'></td>
+								 	<td>End OTP <input type='password' id='optcode' name='unblock'></td>
     								<td>
 										<input type="button" name="continue" style=" color: #FFFFFF;
 										    margin: 5px;
